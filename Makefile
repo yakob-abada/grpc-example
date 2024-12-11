@@ -5,3 +5,6 @@ build_proto:
 
 unit_test:
 	go test ./...
+
+migration:
+	go run db/create_match_table.go

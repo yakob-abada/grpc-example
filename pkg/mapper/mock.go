@@ -10,12 +10,12 @@ type LikedResponseMock struct {
 	mock.Mock
 }
 
-func (m *LikedResponseMock) List(likes []*model.Likes) *pb.ListLikedYouResponse {
+func (m *LikedResponseMock) List(likes []model.Match) *pb.ListLikedYouResponse {
 	args := m.Called(likes)
 	return args.Get(0).(*pb.ListLikedYouResponse)
 }
 
-func (m *LikedResponseMock) Count(i *int) *pb.CountLikedYouResponse {
+func (m *LikedResponseMock) Count(i *int64) *pb.CountLikedYouResponse {
 	args := m.Called(i)
 	return args.Get(0).(*pb.CountLikedYouResponse)
 }

@@ -12,12 +12,9 @@ import (
 func TestList(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		now := time.Now()
-		matched := true
-		likeList := []*model.Likes{{
+		likeList := []model.Match{{
 			RecipientUserId: "1",
 			ActorUserId:     "2",
-			LikedBack:       false,
-			Matched:         &matched,
 			CreatedAt:       now,
 		}}
 
@@ -37,7 +34,7 @@ func TestList(t *testing.T) {
 
 func TestCount(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		count := 2
+		count := int64(2)
 		resp := &pb.CountLikedYouResponse{Count: 2}
 		sut := mapper.LikedResponseMap{}
 		result := sut.Count(&count)

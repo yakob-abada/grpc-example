@@ -7,7 +7,11 @@ import (
 
 type LikedResponseMap struct{}
 
-func (l *LikedResponseMap) List(likes []*model.Likes) *pb.ListLikedYouResponse {
+func NewLikedResponseMap() *LikedResponseMap {
+	return &LikedResponseMap{}
+}
+
+func (l *LikedResponseMap) List(likes []model.Match) *pb.ListLikedYouResponse {
 	var likers []*pb.ListLikedYouResponse_Liker
 	for _, l := range likes {
 		likers = append(likers, &pb.ListLikedYouResponse_Liker{
@@ -19,7 +23,7 @@ func (l *LikedResponseMap) List(likes []*model.Likes) *pb.ListLikedYouResponse {
 	return &pb.ListLikedYouResponse{Likers: likers}
 }
 
-func (l *LikedResponseMap) Count(i *int) *pb.CountLikedYouResponse {
+func (l *LikedResponseMap) Count(i *int64) *pb.CountLikedYouResponse {
 	return &pb.CountLikedYouResponse{Count: uint64(*i)}
 }
 

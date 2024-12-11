@@ -1,24 +1,25 @@
 version: '3.8'
 services:
-  dynamodb-local:
-    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
-    image: "amazon/dynamodb-local:latest"
-    container_name: dynamodb-local
-    ports:
-      - "8000:8000"
+  db:
+    image: mysql:8.4
     restart: always
-    volumes:
-      - "./data:/home/dynamodblocal/data"
-    working_dir: /home/dynamodblocal
-
-  dynamodb:
-    image: "aaronshaf/dynamodb-admin"
-    container_name: dynamodb-admin
-    depends_on:
-      - dynamodb-local
-    restart: always
-    ports:
-      - "8001:8001"
     environment:
-      - DYNAMO_ENDPOINT=http://dynamodb-local:8000
-      - AWS_REGION=ap-southeast-1
+      MYSQL_DATABASE: 'dating_app'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'password'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # <Port exposed> : <MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      - my-db:/var/lib/mysql
+# Names our volume
+volumes:
+  my-db:

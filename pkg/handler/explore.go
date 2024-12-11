@@ -22,29 +22,29 @@ type ExploreServer struct {
 
 // ListLikedYou returns all users who liked the recipient.
 func (s *ExploreServer) ListLikedYou(_ context.Context, req *pb.ListLikedYouRequest) (*pb.ListLikedYouResponse, error) {
-	result, err := s.repo.ListLikedYou(req.RecipientUserId, true)
+	result, err := s.repo.ListLikedYou(req.GetRecipientUserId(), repo.MatchStatusMatched)
 	if err != nil {
 		//log.Fatal(err)
 		return nil, err
 	}
 
-	return s.responseMapper.List(result), nil
+	return s.responseMapper.List(result.Results()), nil
 }
 
 // ListNewLikedYou returns all users who liked the recipient excluding those who have been liked in return.
 func (s *ExploreServer) ListNewLikedYou(_ context.Context, req *pb.ListLikedYouRequest) (*pb.ListLikedYouResponse, error) {
-	result, err := s.repo.ListLikedYou(req.RecipientUserId, false)
+	result, err := s.repo.ListLikedYou(req.GetRecipientUserId(), repo.MatchStatusPending)
 	if err != nil {
 		//log.Fatal(err)
 		return nil, err
 	}
 
-	return s.responseMapper.List(result), nil
+	return s.responseMapper.List(result.Results()), nil
 }
 
 // CountLikedYou counts the number of users who liked the recipient.
 func (s *ExploreServer) CountLikedYou(_ context.Context, req *pb.CountLikedYouRequest) (*pb.CountLikedYouResponse, error) {
-	result, err := s.repo.CountLikedYou(req.RecipientUserId, false)
+	result, err := s.repo.CountLikedYou(req.GetRecipientUserId(), repo.MatchStatusMatched)
 	if err != nil {
 		//log.Fatal(err)
 		return nil, err
@@ -55,7 +55,7 @@ func (s *ExploreServer) CountLikedYou(_ context.Context, req *pb.CountLikedYouRe
 
 // PutDecision record the decision of the actor to like or pass the recipient.
 func (s *ExploreServer) PutDecision(_ context.Context, req *pb.PutDecisionRequest) (*pb.PutDecisionResponse, error) {
-	err := s.repo.Decide(req.RecipientUserId, req.ActorUserId, req.LikedRecipient)
+	err := s.repo.Decide(req.GetRecipientUserId(), req.GetActorUserId(), req.GetLikedRecipient())
 	if err != nil {
 		//log.Fatal(err)
 		return nil, err

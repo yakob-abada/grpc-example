@@ -6,7 +6,7 @@ import (
 )
 
 type LikedResponseMapper interface {
-	List([]*model.Likes) *pb.ListLikedYouResponse
-	Count(*int) *pb.CountLikedYouResponse
+	List([]model.Match) *pb.ListLikedYouResponse
+	Count(*int64) *pb.CountLikedYouResponse
 	Decision(bool) *pb.PutDecisionResponse
 }

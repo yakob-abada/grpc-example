@@ -1,7 +1,7 @@
 build_proto:
 	protoc --go_out=./explore --go_opt=paths=source_relative \
     --go-grpc_out=./explore --go-grpc_opt=paths=source_relative \
-    ./proto/*.proto
+    ./proto/*.proto --experimental_allow_proto3_optional
 
 unit_test:
 	go test ./...

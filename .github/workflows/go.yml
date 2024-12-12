@@ -25,7 +25,7 @@ jobs:
         go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
         go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
         mkdir -p "explore"
-        make build_proto --experimental_allow_proto3_optional
+        make build_proto
         go mod download
 
     - name: Test

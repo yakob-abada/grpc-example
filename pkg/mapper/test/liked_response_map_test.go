@@ -59,7 +59,7 @@ func TestCount(t *testing.T) {
 		count := int64(2)
 		resp := &pb.CountLikedYouResponse{Count: 2}
 		sut := mapper.LikedResponseMap{}
-		result := sut.Count(&count)
+		result := sut.Count(count)
 
 		assert.Equal(t, resp, result)
 	})

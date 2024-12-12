@@ -26,7 +26,29 @@ func TestList(t *testing.T) {
 		}}
 
 		sut := mapper.LikedResponseMap{}
-		result := sut.List(likeList)
+		result := sut.List(likeList, "")
+
+		assert.Equal(t, listLikedYouRes, result)
+	})
+
+	t.Run("success with nextPaginationToken", func(t *testing.T) {
+		now := time.Now()
+		nextPaginationToken := "nextPaginationToken"
+		likeList := []model.Match{{
+			RecipientUserId: "1",
+			ActorUserId:     "2",
+			CreatedAt:       now,
+		}}
+
+		listLikedYouRes := &pb.ListLikedYouResponse{Likers: []*pb.ListLikedYouResponse_Liker{
+			{
+				ActorId:       "2",
+				UnixTimestamp: uint64(now.Unix()),
+			},
+		}, NextPaginationToken: &nextPaginationToken}
+
+		sut := mapper.LikedResponseMap{}
+		result := sut.List(likeList, nextPaginationToken)
 
 		assert.Equal(t, listLikedYouRes, result)
 	})

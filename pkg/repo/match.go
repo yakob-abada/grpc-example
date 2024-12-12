@@ -21,15 +21,21 @@ const (
 	MatchStatusUnMatched
 )
 
-func (m *Match) ListLikedYou(recipientUserId string, status int) (Paginator, error) {
+func (m *Match) ListLikedYou(recipientUserId string, status int, paginatedReq *PaginatedRequest) (Paginator, error) {
+	if paginatedReq == nil {
+		paginatedReq = DefaultPaginatedRequest()
+	}
+
 	var matches []model.Match
-	err := m.db.Find(&matches).Where("recipient_user_id = ? AND status = ?", recipientUserId, status).Error
+	err := m.db.Offset(int(paginatedReq.Offset())).Limit(int(paginatedReq.Limit())).Find(&matches).
+		Where("recipient_user_id = ? AND status = ?", recipientUserId, status).
+		Error
 
 	if err != nil {
 		return nil, err
 	}
 
-	return NewPaginatedResult(matches, false), nil
+	return NewPaginatedResult(matches, true), nil
 }
 
 func (m *Match) CountLikedYou(recipientUserId string, status int) (*int64, error) {

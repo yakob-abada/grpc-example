@@ -8,8 +8,8 @@ type LikeMock struct {
 	mock.Mock
 }
 
-func (m *LikeMock) ListLikedYou(recipientUserId string, status int) (Paginator, error) {
-	args := m.Called(recipientUserId, status)
+func (m *LikeMock) ListLikedYou(recipientUserId string, status int, paginatedReq *PaginatedRequest) (Paginator, error) {
+	args := m.Called(recipientUserId, status, nil)
 
 	if args.Error(1) != nil {
 		return nil, args.Error(1)

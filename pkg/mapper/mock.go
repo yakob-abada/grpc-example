@@ -10,8 +10,9 @@ type LikedResponseMock struct {
 	mock.Mock
 }
 
-func (m *LikedResponseMock) List(likes []model.Match) *pb.ListLikedYouResponse {
-	args := m.Called(likes)
+func (m *LikedResponseMock) List(likes []model.Match, nextPaginationToken string) *pb.ListLikedYouResponse {
+	args := m.Called(likes, nextPaginationToken)
+
 	return args.Get(0).(*pb.ListLikedYouResponse)
 }
 

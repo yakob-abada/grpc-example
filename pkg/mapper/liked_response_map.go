@@ -11,7 +11,7 @@ func NewLikedResponseMap() *LikedResponseMap {
 	return &LikedResponseMap{}
 }
 
-func (l *LikedResponseMap) List(likes []model.Match) *pb.ListLikedYouResponse {
+func (l *LikedResponseMap) List(likes []model.Match, nextPaginationToken string) *pb.ListLikedYouResponse {
 	var likers []*pb.ListLikedYouResponse_Liker
 	for _, l := range likes {
 		likers = append(likers, &pb.ListLikedYouResponse_Liker{
@@ -20,7 +20,13 @@ func (l *LikedResponseMap) List(likes []model.Match) *pb.ListLikedYouResponse {
 		})
 	}
 
-	return &pb.ListLikedYouResponse{Likers: likers}
+	response := &pb.ListLikedYouResponse{Likers: likers}
+
+	if nextPaginationToken != "" {
+		response.NextPaginationToken = &nextPaginationToken
+	}
+
+	return response
 }
 
 func (l *LikedResponseMap) Count(i *int64) *pb.CountLikedYouResponse {

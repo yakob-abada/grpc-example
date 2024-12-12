@@ -6,6 +6,8 @@ import (
 	"github.com/yakob-abada/backend-match/pkg/mapper"
 	"github.com/yakob-abada/backend-match/pkg/pagination"
 	"github.com/yakob-abada/backend-match/pkg/repo"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func NewExploreServer(
@@ -29,14 +31,14 @@ type ExploreServer struct {
 func (s *ExploreServer) ListLikedYou(_ context.Context, req *pb.ListLikedYouRequest) (*pb.ListLikedYouResponse, error) {
 	pageToken, err := s.pagination.Parse(req)
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.InvalidArgument, "page token parsing failed: %v", err)
 	}
 	result, err := s.repo.ListLikedYou(
 		req.GetRecipientUserId(), repo.MatchStatusMatched, repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize),
 	)
 	if err != nil {
 		//log.Fatal(err)
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "failed to get result: %v", err)
 	}
 
 	nextPageToken := ""
@@ -52,14 +54,14 @@ func (s *ExploreServer) ListLikedYou(_ context.Context, req *pb.ListLikedYouRequ
 func (s *ExploreServer) ListNewLikedYou(_ context.Context, req *pb.ListLikedYouRequest) (*pb.ListLikedYouResponse, error) {
 	pageToken, err := s.pagination.Parse(req)
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.InvalidArgument, "page token parsing failed: %v", err)
 	}
 	result, err := s.repo.ListLikedYou(
 		req.GetRecipientUserId(), repo.MatchStatusPending, repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize),
 	)
 	if err != nil {
 		//log.Fatal(err)
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "failed to get result: %v", err)
 	}
 
 	nextPageToken := ""
@@ -76,7 +78,7 @@ func (s *ExploreServer) CountLikedYou(_ context.Context, req *pb.CountLikedYouRe
 	result, err := s.repo.CountLikedYou(req.GetRecipientUserId(), repo.MatchStatusMatched)
 	if err != nil {
 		//log.Fatal(err)
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "failed to get result: %v", err)
 	}
 
 	return s.responseMapper.Count(result), nil
@@ -87,7 +89,7 @@ func (s *ExploreServer) PutDecision(_ context.Context, req *pb.PutDecisionReques
 	err := s.repo.Decide(req.GetRecipientUserId(), req.GetActorUserId(), req.GetLikedRecipient())
 	if err != nil {
 		//log.Fatal(err)
-		return nil, err
+		return nil, status.Errorf(codes.Internal, "failed to update: %v", err)
 	}
 
 	return s.responseMapper.Decision(req.LikedRecipient), nil

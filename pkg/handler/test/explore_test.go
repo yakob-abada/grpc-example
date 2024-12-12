@@ -106,7 +106,7 @@ func TestListLikedYou(t *testing.T) {
 		response, err := sut.ListLikedYou(context.Background(), &pb.ListLikedYouRequest{RecipientUserId: "1"})
 
 		assert.Nil(t, response)
-		assert.EqualError(t, err, "connection failed")
+		assert.EqualError(t, err, "rpc error: code = Internal desc = failed to get result: connection failed")
 	})
 }
 
@@ -201,7 +201,7 @@ func TestListNewLikedYou(t *testing.T) {
 		response, err := sut.ListNewLikedYou(context.Background(), &pb.ListLikedYouRequest{RecipientUserId: "1"})
 
 		assert.Nil(t, response)
-		assert.EqualError(t, err, "connection failed")
+		assert.EqualError(t, err, "rpc error: code = Internal desc = failed to get result: connection failed")
 	})
 }
 
@@ -209,11 +209,11 @@ func TestCountLikedYou(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		repoMock := &repo.LikeMock{}
 		count := int64(2)
-		repoMock.On("CountLikedYou", "1", repo.MatchStatusMatched).Once().Return(&count, nil)
+		repoMock.On("CountLikedYou", "1", repo.MatchStatusMatched).Once().Return(count, nil)
 
 		resp := &pb.CountLikedYouResponse{Count: 2}
 		mapperMock := &mapper.LikedResponseMock{}
-		mapperMock.On("Count", &count).Once().Return(resp, nil)
+		mapperMock.On("Count", count).Once().Return(resp, nil)
 
 		token := pagination.Token{
 			Offset:          10,
@@ -245,7 +245,7 @@ func TestCountLikedYou(t *testing.T) {
 		sut := handler.NewExploreServer(repoMock, mapperMock, pageTokenMock)
 		response, err := sut.CountLikedYou(context.Background(), &pb.CountLikedYouRequest{RecipientUserId: "1"})
 		assert.Nil(t, response)
-		assert.EqualError(t, err, "connection failed")
+		assert.EqualError(t, err, "rpc error: code = Internal desc = failed to get result: connection failed")
 	})
 }
 
@@ -288,6 +288,6 @@ func TestPutDecision(t *testing.T) {
 		sut := handler.NewExploreServer(repoMock, mapperMock, pageTokenMock)
 		response, err := sut.PutDecision(context.Background(), &pb.PutDecisionRequest{RecipientUserId: "1", ActorUserId: "2", LikedRecipient: false})
 		assert.Nil(t, response)
-		assert.EqualError(t, err, "connection failed")
+		assert.EqualError(t, err, "rpc error: code = Internal desc = failed to update: connection failed")
 	})
 }

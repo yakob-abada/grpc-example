@@ -18,13 +18,13 @@ func (m *LikeMock) ListLikedYou(recipientUserId string, status int, paginatedReq
 	return args.Get(0).(Paginator), args.Error(1)
 }
 
-func (m *LikeMock) CountLikedYou(recipientUserId string, status int) (*int64, error) {
+func (m *LikeMock) CountLikedYou(recipientUserId string, status int) (int64, error) {
 	args := m.Called(recipientUserId, status)
 	if args.Error(1) != nil {
-		return nil, args.Error(1)
+		return 0, args.Error(1)
 	}
 
-	return args.Get(0).(*int64), args.Error(1)
+	return args.Get(0).(int64), args.Error(1)
 }
 
 func (m *LikeMock) Decide(recipientUserId string, actorUserId string, match bool) error {

@@ -3,8 +3,8 @@ package repo
 const maxSize = 50
 
 type PaginatedRequest struct {
-	offset int64
-	limit  int64
+	offset int
+	limit  int
 }
 
 func DefaultPaginatedRequest() *PaginatedRequest {
@@ -14,14 +14,14 @@ func DefaultPaginatedRequest() *PaginatedRequest {
 	}
 }
 
-func NewPaginatedRequest(offset, limit int64) *PaginatedRequest {
+func NewPaginatedRequest(offset, limit int) *PaginatedRequest {
 	return &PaginatedRequest{
 		offset: offset,
 		limit:  limit,
 	}
 }
 
-func (p *PaginatedRequest) Limit() int64 {
+func (p *PaginatedRequest) Limit() int {
 	if p.limit > maxSize {
 		p.limit = maxSize
 	}
@@ -29,6 +29,6 @@ func (p *PaginatedRequest) Limit() int64 {
 	return p.limit
 }
 
-func (p *PaginatedRequest) Offset() int64 {
+func (p *PaginatedRequest) Offset() int {
 	return p.offset
 }

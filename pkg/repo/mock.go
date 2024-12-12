@@ -9,7 +9,7 @@ type LikeMock struct {
 }
 
 func (m *LikeMock) ListLikedYou(recipientUserId string, status int, paginatedReq *PaginatedRequest) (Paginator, error) {
-	args := m.Called(recipientUserId, status, nil)
+	args := m.Called(recipientUserId, status, paginatedReq)
 
 	if args.Error(1) != nil {
 		return nil, args.Error(1)

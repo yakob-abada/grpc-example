@@ -10,10 +10,10 @@ import (
 const pageTokenChecksumMask uint32 = 0x9acb0442
 
 type PageToken struct {
-	PageSize int64
+	PageSize int
 }
 
-func NewPageToken(pageSize int64) *PageToken {
+func NewPageToken(pageSize int) *PageToken {
 	return &PageToken{PageSize: pageSize}
 }
 
@@ -27,7 +27,7 @@ func (p *PageToken) Parse(request Request) (Token, error) {
 	}
 	requestChecksum ^= pageTokenChecksumMask // apply checksum mask for Token
 	if request.GetPaginationToken() == "" {
-		offset := int64(0)
+		offset := 0
 
 		return Token{
 			Offset:          offset,

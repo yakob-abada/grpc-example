@@ -3,11 +3,11 @@ package pagination
 // Token is a page token that uses an offset to delineate which page to fetch.
 type Token struct {
 	// Offset of the page.
-	Offset int64
+	Offset int
 	// RequestChecksum is the checksum of the request that generated the page token.
 	RequestChecksum uint32
 
-	PageSize int64
+	PageSize int
 }
 
 // Next returns the next page token for the provided Request.

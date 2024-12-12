@@ -11,7 +11,7 @@ import (
 )
 
 func NewExploreServer(db *gorm.DB) *handler.ExploreServer {
-	pageSize, err := strconv.ParseInt(os.Getenv("PAGE_SIZE"), 10, 64)
+	pageSize, err := strconv.Atoi(os.Getenv("PAGE_SIZE"))
 	if err != nil {
 		pageSize = 2
 	}

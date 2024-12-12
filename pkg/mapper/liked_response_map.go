@@ -29,8 +29,8 @@ func (l *LikedResponseMap) List(likes []model.Match, nextPaginationToken string)
 	return response
 }
 
-func (l *LikedResponseMap) Count(i *int64) *pb.CountLikedYouResponse {
-	return &pb.CountLikedYouResponse{Count: uint64(*i)}
+func (l *LikedResponseMap) Count(i int64) *pb.CountLikedYouResponse {
+	return &pb.CountLikedYouResponse{Count: uint64(i)}
 }
 
 func (l *LikedResponseMap) Decision(b bool) *pb.PutDecisionResponse {

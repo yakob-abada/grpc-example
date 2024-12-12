@@ -28,9 +28,9 @@ func (m *Match) ListLikedYou(recipientUserId string, status int, paginatedReq *P
 	}
 
 	var matches []model.Match
-	err := m.db.Offset(paginatedReq.Offset()).Limit(paginatedReq.Limit()+1).Find(&matches).
+	err := m.db.Offset(paginatedReq.Offset()).Limit(paginatedReq.Limit()+1).
 		Where("recipient_user_id = ? AND status = ?", recipientUserId, status).
-		Error
+		Find(&matches).Error
 
 	if err != nil {
 		return nil, err
@@ -48,16 +48,16 @@ func (m *Match) ListLikedYou(recipientUserId string, status int, paginatedReq *P
 }
 
 // CountLikedYou returns count of pending matches.
-func (m *Match) CountLikedYou(recipientUserId string, status int) (*int64, error) {
+func (m *Match) CountLikedYou(recipientUserId string, status int) (int64, error) {
 	var matches []*model.Match
 	var count int64
 	err := m.db.Find(&matches).Where("recipient_user_id = ? AND status = ?", recipientUserId, status).Count(&count).Error
 
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	return &count, nil
+	return count, nil
 }
 
 // Decide to updated status to match or unmatch.

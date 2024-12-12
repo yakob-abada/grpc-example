@@ -7,6 +7,6 @@ import (
 
 type LikedResponseMapper interface {
 	List([]model.Match, string) *pb.ListLikedYouResponse
-	Count(*int64) *pb.CountLikedYouResponse
+	Count(int64) *pb.CountLikedYouResponse
 	Decision(bool) *pb.PutDecisionResponse
 }

@@ -16,7 +16,7 @@ func (m *LikedResponseMock) List(likes []model.Match, nextPaginationToken string
 	return args.Get(0).(*pb.ListLikedYouResponse)
 }
 
-func (m *LikedResponseMock) Count(i *int64) *pb.CountLikedYouResponse {
+func (m *LikedResponseMock) Count(i int64) *pb.CountLikedYouResponse {
 	args := m.Called(i)
 	return args.Get(0).(*pb.CountLikedYouResponse)
 }

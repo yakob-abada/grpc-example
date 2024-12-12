@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 	"log"
 	"net"
+	"os"
 )
 
 func main() {
@@ -37,6 +38,11 @@ func main() {
 }
 
 func connectDB() (*gorm.DB, error) {
-	dsn := "user:password@tcp(127.0.0.1:3306)/dating_app?charset=utf8mb4&parseTime=True&loc=Local"
+	host := os.Getenv("DB_HOST")
+	username := os.Getenv("DB_USERNAME")
+	password := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, dbName)
+
 	return gorm.Open(mysql.Open(dsn), &gorm.Config{})
 }

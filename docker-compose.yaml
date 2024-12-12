@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  db:
+  mysql:
     image: mysql:8.4
     restart: always
     environment:
@@ -12,14 +12,38 @@ services:
       # Password for root access
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
-      # <Port exposed> : <MySQL Port running inside container>
       - '3306:3306'
     expose:
-      # Opens port 3306 on the container
       - '3306'
-      # Where our data will be persisted
     volumes:
       - my-db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysql", "--help"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  grpc-server:
+    build: .
+    ports:
+      - "9001:9001"
+    env_file:
+      - .env
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    tty: true
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOSTS=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    ports:
+      - "8081:80"
 # Names our volume
 volumes:
   my-db:

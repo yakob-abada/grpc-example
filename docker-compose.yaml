@@ -23,6 +23,7 @@ services:
       timeout: 5s
       retries: 3
   grpc-server:
+    container_name: grpc-server
     build: .
     ports:
       - "9001:9001"

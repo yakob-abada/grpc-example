@@ -1,13 +1,20 @@
 package main
 
 import (
+	"fmt"
 	"github.com/yakob-abada/backend-match/pkg/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"os"
 )
 
 func main() {
-	dsn := "user:password@tcp(127.0.0.1:3306)/dating_app?charset=utf8mb4&parseTime=True&loc=Local"
+	host := os.Getenv("DB_HOST")
+	username := os.Getenv("DB_USERNAME")
+	password := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
+	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, dbName)
+
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")

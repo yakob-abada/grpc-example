@@ -4,6 +4,12 @@ import (
 	"time"
 )
 
+const (
+	MatchStatusPending = iota
+	MatchStatusMatched
+	MatchStatusUnMatched
+)
+
 type Match struct {
 	RecipientUserId string `gorm:"primaryKey;autoIncrement:false"`
 	ActorUserId     string `gorm:"primaryKey;autoIncrement:false"`

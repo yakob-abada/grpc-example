@@ -4,6 +4,7 @@ import (
 	"context"
 	pb "github.com/yakob-abada/backend-match/explore/proto"
 	"github.com/yakob-abada/backend-match/pkg/mapper"
+	"github.com/yakob-abada/backend-match/pkg/model"
 	"github.com/yakob-abada/backend-match/pkg/pagination"
 	"github.com/yakob-abada/backend-match/pkg/repo"
 	"google.golang.org/grpc/codes"
@@ -34,7 +35,7 @@ func (s *ExploreServer) ListLikedYou(_ context.Context, req *pb.ListLikedYouRequ
 		return nil, status.Errorf(codes.InvalidArgument, "page token parsing failed: %v", err)
 	}
 	result, err := s.repo.ListLikedYou(
-		req.GetRecipientUserId(), repo.MatchStatusMatched, repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize),
+		req.GetRecipientUserId(), model.MatchStatusMatched, repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize),
 	)
 	if err != nil {
 		//log.Fatal(err)
@@ -57,7 +58,7 @@ func (s *ExploreServer) ListNewLikedYou(_ context.Context, req *pb.ListLikedYouR
 		return nil, status.Errorf(codes.InvalidArgument, "page token parsing failed: %v", err)
 	}
 	result, err := s.repo.ListLikedYou(
-		req.GetRecipientUserId(), repo.MatchStatusPending, repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize),
+		req.GetRecipientUserId(), model.MatchStatusPending, repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize),
 	)
 	if err != nil {
 		//log.Fatal(err)
@@ -75,7 +76,7 @@ func (s *ExploreServer) ListNewLikedYou(_ context.Context, req *pb.ListLikedYouR
 
 // CountLikedYou counts the number of users who liked the recipient.
 func (s *ExploreServer) CountLikedYou(_ context.Context, req *pb.CountLikedYouRequest) (*pb.CountLikedYouResponse, error) {
-	result, err := s.repo.CountLikedYou(req.GetRecipientUserId(), repo.MatchStatusMatched)
+	result, err := s.repo.CountLikedYou(req.GetRecipientUserId(), model.MatchStatusMatched)
 	if err != nil {
 		//log.Fatal(err)
 		return nil, status.Errorf(codes.Internal, "failed to get result: %v", err)

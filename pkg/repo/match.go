@@ -15,12 +15,6 @@ func NewMatch(db *gorm.DB) *Match {
 	}
 }
 
-const (
-	MatchStatusPending = iota
-	MatchStatusMatched
-	MatchStatusUnMatched
-)
-
 // ListLikedYou return list of matches based on recipientUserId and status, result returns with certain limit.
 func (m *Match) ListLikedYou(recipientUserId string, status int, paginatedReq *PaginatedRequest) (Paginator, error) {
 	if paginatedReq == nil {
@@ -62,10 +56,10 @@ func (m *Match) CountLikedYou(recipientUserId string, status int) (int64, error)
 
 // Decide to updated status to match or unmatch.
 func (m *Match) Decide(recipientUserId string, actorUserId string, match bool) error {
-	status := MatchStatusUnMatched
+	status := model.MatchStatusUnMatched
 
 	if match {
-		status = MatchStatusMatched
+		status = model.MatchStatusMatched
 	}
 
 	return m.db.Model(&model.Match{}).

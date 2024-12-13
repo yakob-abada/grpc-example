@@ -21,12 +21,12 @@ func TestListLikedYou(t *testing.T) {
 		likeList := []model.Match{{
 			RecipientUserId: "1",
 			ActorUserId:     "2",
-			Status:          repo.MatchStatusMatched,
+			Status:          model.MatchStatusMatched,
 			CreatedAt:       now,
 		}}
 		pr := repo.NewPaginatedResult(likeList, false)
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListLikedYou", "1", repo.MatchStatusMatched, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
+		repoMock.On("ListLikedYou", "1", model.MatchStatusMatched, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
 
 		listLikedYouRes := &pb.ListLikedYouResponse{Likers: []*pb.ListLikedYouResponse_Liker{
 			{
@@ -57,12 +57,12 @@ func TestListLikedYou(t *testing.T) {
 		likeList := []model.Match{{
 			RecipientUserId: "1",
 			ActorUserId:     "2",
-			Status:          repo.MatchStatusMatched,
+			Status:          model.MatchStatusMatched,
 			CreatedAt:       now,
 		}}
 		pr := repo.NewPaginatedResult(likeList, true)
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListLikedYou", "1", repo.MatchStatusMatched, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
+		repoMock.On("ListLikedYou", "1", model.MatchStatusMatched, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
 
 		listLikedYouRes := &pb.ListLikedYouResponse{Likers: []*pb.ListLikedYouResponse_Liker{
 			{
@@ -90,7 +90,7 @@ func TestListLikedYou(t *testing.T) {
 
 	t.Run("failure", func(t *testing.T) {
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListLikedYou", "1", repo.MatchStatusMatched, repo.NewPaginatedRequest(10, 10)).Once().Return(nil, errors.New("connection failed"))
+		repoMock.On("ListLikedYou", "1", model.MatchStatusMatched, repo.NewPaginatedRequest(10, 10)).Once().Return(nil, errors.New("connection failed"))
 
 		mapperMock := &mapper.LikedResponseMock{}
 
@@ -116,12 +116,12 @@ func TestListNewLikedYou(t *testing.T) {
 		likeList := []model.Match{{
 			RecipientUserId: "1",
 			ActorUserId:     "2",
-			Status:          repo.MatchStatusPending,
+			Status:          model.MatchStatusPending,
 			CreatedAt:       now,
 		}}
 		pr := repo.NewPaginatedResult(likeList, false)
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListLikedYou", "1", repo.MatchStatusPending, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
+		repoMock.On("ListLikedYou", "1", model.MatchStatusPending, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
 
 		listLikedYouRes := &pb.ListLikedYouResponse{Likers: []*pb.ListLikedYouResponse_Liker{
 			{
@@ -152,12 +152,12 @@ func TestListNewLikedYou(t *testing.T) {
 		likeList := []model.Match{{
 			RecipientUserId: "1",
 			ActorUserId:     "2",
-			Status:          repo.MatchStatusPending,
+			Status:          model.MatchStatusPending,
 			CreatedAt:       now,
 		}}
 		pr := repo.NewPaginatedResult(likeList, true)
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListLikedYou", "1", repo.MatchStatusPending, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
+		repoMock.On("ListLikedYou", "1", model.MatchStatusPending, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
 
 		listLikedYouRes := &pb.ListLikedYouResponse{Likers: []*pb.ListLikedYouResponse_Liker{
 			{
@@ -185,7 +185,7 @@ func TestListNewLikedYou(t *testing.T) {
 
 	t.Run("failure", func(t *testing.T) {
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListLikedYou", "1", repo.MatchStatusPending, repo.NewPaginatedRequest(10, 10)).Once().Return(nil, errors.New("connection failed"))
+		repoMock.On("ListLikedYou", "1", model.MatchStatusPending, repo.NewPaginatedRequest(10, 10)).Once().Return(nil, errors.New("connection failed"))
 
 		mapperMock := &mapper.LikedResponseMock{}
 
@@ -209,7 +209,7 @@ func TestCountLikedYou(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		repoMock := &repo.LikeMock{}
 		count := int64(2)
-		repoMock.On("CountLikedYou", "1", repo.MatchStatusMatched).Once().Return(count, nil)
+		repoMock.On("CountLikedYou", "1", model.MatchStatusMatched).Once().Return(count, nil)
 
 		resp := &pb.CountLikedYouResponse{Count: 2}
 		mapperMock := &mapper.LikedResponseMock{}
@@ -230,7 +230,7 @@ func TestCountLikedYou(t *testing.T) {
 	})
 	t.Run("failure", func(t *testing.T) {
 		repoMock := &repo.LikeMock{}
-		repoMock.On("CountLikedYou", "1", repo.MatchStatusMatched).Once().Return(nil, errors.New("connection failed"))
+		repoMock.On("CountLikedYou", "1", model.MatchStatusMatched).Once().Return(nil, errors.New("connection failed"))
 
 		mapperMock := &mapper.LikedResponseMock{}
 

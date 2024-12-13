@@ -22,3 +22,4 @@ Additionally, the application has been containerized using Docker to ensure cons
 * Increase Test Coverage: Enhance the unit and integration tests to improve overall test coverage and ensure greater reliability.
 * Implement Logging System: Introduce a robust logging framework to provide better traceability, 
 error reporting, and debugging capabilities across the application.
+* proto file(s) should be in separate repository and should be imported to avoid repeat.

@@ -28,7 +28,7 @@ func TestListNewLikedYou(t *testing.T) {
 		})
 
 		assert.Nil(t, err)
-		assert.Equal(t, 1, len(response.Likers))
-		assert.Nil(t, response.NextPaginationToken)
+		assert.Equal(t, 2, len(response.Likers))
+		assert.NotNil(t, response.NextPaginationToken)
 	})
 }

@@ -42,7 +42,7 @@ func TestListLikeYou(t *testing.T) {
 		})
 
 		assert.Nil(t, err)
-		assert.Equal(t, 1, len(response.Likers))
+		assert.Equal(t, 2, len(response.Likers))
 		assert.NotNil(t, response.NextPaginationToken)
 		assert.NotEqual(t, *nextPageToken, *response.NextPaginationToken)
 	})

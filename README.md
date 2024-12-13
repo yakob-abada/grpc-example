@@ -8,9 +8,13 @@ Additionally, the application has been containerized using Docker to ensure cons
 
 * copy `env.example` file to `.env` `cp env.example .env`
 * Build and start the application with Docker Compose `docker-compose up --build`
+* You migration up inside the container and could be done by the following.
 * Access the container `docker exec -it grpc-server bash` 
+  * To apply migration_up `make migration_up`
   * To execute unit tests `make unit_test`
-  * To apply migrations `make migration`
+  * To execute integration tests `make unit_test`
+  * To apply migration_down `make migration_down`
+  * To run fixtures `make fixtures`
 
 * phpmyadmin container is run so database can be accessed from a browser http://localhost:8081
 

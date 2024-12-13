@@ -29,6 +29,8 @@ services:
       - "9001:9001"
     env_file:
       - .env
+    volumes:
+      - ./:/usr/src/app
     depends_on:
       mysql:
         condition: service_healthy

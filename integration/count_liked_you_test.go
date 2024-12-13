@@ -28,7 +28,7 @@ func TestCountLikedYou(t *testing.T) {
 		})
 
 		assert.Nil(t, err)
-		assert.Equal(t, uint64(1), response.Count)
+		assert.Equal(t, uint64(10), response.Count)
 	})
 
 	t.Run("success no match for given user", func(t *testing.T) {

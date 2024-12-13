@@ -16,14 +16,14 @@ func NewMatch(db *gorm.DB) *Match {
 }
 
 // ListLikedYou return list of matches based on recipientUserId and status, result returns with certain limit.
-func (m *Match) ListLikedYou(recipientUserId string, status int, paginatedReq *PaginatedRequest) (Paginator, error) {
+func (m *Match) ListLikedYou(recipientUserId string, statuses []int, paginatedReq *PaginatedRequest) (Paginator, error) {
 	if paginatedReq == nil {
 		paginatedReq = DefaultPaginatedRequest()
 	}
 
 	var matches []model.Match
 	err := m.db.Offset(paginatedReq.Offset()).Limit(paginatedReq.Limit()+1).
-		Where("recipient_user_id = ? AND status = ?", recipientUserId, status).
+		Where("recipient_user_id = ? AND status in (?)", recipientUserId, statuses).
 		Find(&matches).Error
 
 	if err != nil {
@@ -42,10 +42,10 @@ func (m *Match) ListLikedYou(recipientUserId string, status int, paginatedReq *P
 }
 
 // CountLikedYou returns count of pending matches.
-func (m *Match) CountLikedYou(recipientUserId string, status int) (int64, error) {
+func (m *Match) CountLikedYou(recipientUserId string) (int64, error) {
 	var matches []*model.Match
 	var count int64
-	err := m.db.Find(&matches).Where("recipient_user_id = ? AND status = ?", recipientUserId, status).Count(&count).Error
+	err := m.db.Find(&matches).Where("recipient_user_id = ?", recipientUserId).Count(&count).Error
 
 	if err != nil {
 		return 0, err

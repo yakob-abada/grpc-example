@@ -34,8 +34,8 @@ func (s *ExploreServer) ListLikedYou(_ context.Context, req *pb.ListLikedYouRequ
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "page token parsing failed: %v", err)
 	}
-	result, err := s.repo.ListLikedYou(
-		req.GetRecipientUserId(), []int{model.MatchStatusPending, model.MatchStatusMatched, model.MatchStatusUnMatched}, repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize),
+	result, err := s.repo.ListAllLikedYou(
+		req.GetRecipientUserId(), repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize),
 	)
 	if err != nil {
 		//log.Fatal(err)

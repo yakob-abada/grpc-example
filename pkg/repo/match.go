@@ -15,7 +15,33 @@ func NewMatch(db *gorm.DB) *Match {
 	}
 }
 
-// ListLikedYou return list of matches based on recipientUserId and status, result returns with certain limit.
+// ListAllLikedYou return list of matches based on recipientUserId and, result returns with certain limit.
+func (m *Match) ListAllLikedYou(recipientUserId string, paginatedReq *PaginatedRequest) (Paginator, error) {
+	if paginatedReq == nil {
+		paginatedReq = DefaultPaginatedRequest()
+	}
+
+	var matches []model.Match
+	err := m.db.Offset(paginatedReq.Offset()).Limit(paginatedReq.Limit()+1).
+		Where("recipient_user_id = ?", recipientUserId).
+		Find(&matches).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	// A tricky way to answer has next page question by adding limit by own and see if result is more than limit then it
+	// means there is more to be added in following page. the slice go cleaned up from the extra element.
+	hasNextPage := false
+	if len(matches) > paginatedReq.Limit() {
+		hasNextPage = true
+		matches = matches[:len(matches)-1]
+	}
+
+	return NewPaginatedResult(matches, hasNextPage), nil
+}
+
+// ListLikedYou return list of matches based on recipientUserId and statuses, result returns with certain limit.
 func (m *Match) ListLikedYou(recipientUserId string, statuses []int, paginatedReq *PaginatedRequest) (Paginator, error) {
 	if paginatedReq == nil {
 		paginatedReq = DefaultPaginatedRequest()

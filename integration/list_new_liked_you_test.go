@@ -6,12 +6,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	pb "github.com/yakob-abada/backend-match/explore/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"testing"
 )
 
 func TestListNewLikedYou(t *testing.T) {
-	conn, err := grpc.Dial("localhost:9001", grpc.WithInsecure())
+	conn, err := grpc.NewClient("localhost:9001", grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)

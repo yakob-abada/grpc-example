@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"context"
 	"github.com/yakob-abada/backend-match/pkg/model"
 	"gorm.io/gorm"
 )
@@ -16,13 +17,13 @@ func NewMatch(db *gorm.DB) *Match {
 }
 
 // ListAllLikedYou return list of matches based on recipientUserId and, result returns with certain limit.
-func (m *Match) ListAllLikedYou(recipientUserId string, paginatedReq *PaginatedRequest) (Paginator, error) {
+func (m *Match) ListAllLikedYou(ctx context.Context, paginatedReq *PaginatedRequest, recipientUserId string) (Paginator, error) {
 	if paginatedReq == nil {
 		paginatedReq = DefaultPaginatedRequest()
 	}
 
 	var matches []model.Match
-	err := m.db.Offset(paginatedReq.Offset()).Limit(paginatedReq.Limit()+1).
+	err := m.db.WithContext(ctx).Offset(paginatedReq.Offset()).Limit(paginatedReq.Limit()+1).
 		Where("recipient_user_id = ?", recipientUserId).
 		Find(&matches).Error
 
@@ -42,13 +43,13 @@ func (m *Match) ListAllLikedYou(recipientUserId string, paginatedReq *PaginatedR
 }
 
 // ListLikedYou return list of matches based on recipientUserId and statuses, result returns with certain limit.
-func (m *Match) ListLikedYou(recipientUserId string, statuses []int, paginatedReq *PaginatedRequest) (Paginator, error) {
+func (m *Match) ListLikedYou(ctx context.Context, statuses []int, paginatedReq *PaginatedRequest, recipientUserId string) (Paginator, error) {
 	if paginatedReq == nil {
 		paginatedReq = DefaultPaginatedRequest()
 	}
 
 	var matches []model.Match
-	err := m.db.Offset(paginatedReq.Offset()).Limit(paginatedReq.Limit()+1).
+	err := m.db.WithContext(ctx).Offset(paginatedReq.Offset()).Limit(paginatedReq.Limit()+1).
 		Where("recipient_user_id = ? AND status in (?)", recipientUserId, statuses).
 		Find(&matches).Error
 
@@ -68,10 +69,10 @@ func (m *Match) ListLikedYou(recipientUserId string, statuses []int, paginatedRe
 }
 
 // CountLikedYou returns count of pending matches.
-func (m *Match) CountLikedYou(recipientUserId string) (int64, error) {
+func (m *Match) CountLikedYou(ctx context.Context, recipientUserId string) (int64, error) {
 	var matches []*model.Match
 	var count int64
-	err := m.db.Find(&matches).Where("recipient_user_id = ?", recipientUserId).Count(&count).Error
+	err := m.db.WithContext(ctx).Find(&matches).Where("recipient_user_id = ?", recipientUserId).Count(&count).Error
 
 	if err != nil {
 		return 0, err
@@ -81,14 +82,14 @@ func (m *Match) CountLikedYou(recipientUserId string) (int64, error) {
 }
 
 // Decide to updated status to match or unmatch.
-func (m *Match) Decide(recipientUserId string, actorUserId string, match bool) error {
+func (m *Match) Decide(ctx context.Context, recipientUserId string, actorUserId string, match bool) error {
 	status := model.MatchStatusUnMatched
 
 	if match {
 		status = model.MatchStatusMatched
 	}
 
-	return m.db.Model(&model.Match{}).
+	return m.db.WithContext(ctx).Model(&model.Match{}).
 		Where("recipient_user_id = ? AND actor_user_id = ?", recipientUserId, actorUserId).
 		Update("status", status).Error
 }

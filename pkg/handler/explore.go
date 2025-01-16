@@ -29,14 +29,12 @@ type ExploreServer struct {
 }
 
 // ListLikedYou returns all users who liked the recipient.
-func (s *ExploreServer) ListLikedYou(_ context.Context, req *pb.ListLikedYouRequest) (*pb.ListLikedYouResponse, error) {
+func (s *ExploreServer) ListLikedYou(ctx context.Context, req *pb.ListLikedYouRequest) (*pb.ListLikedYouResponse, error) {
 	pageToken, err := s.pagination.Parse(req)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "page token parsing failed: %v", err)
 	}
-	result, err := s.repo.ListAllLikedYou(
-		req.GetRecipientUserId(), repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize),
-	)
+	result, err := s.repo.ListAllLikedYou(ctx, repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize), req.GetRecipientUserId())
 	if err != nil {
 		//log.Fatal(err)
 		return nil, status.Errorf(codes.Internal, "failed to get result: %v", err)
@@ -52,14 +50,12 @@ func (s *ExploreServer) ListLikedYou(_ context.Context, req *pb.ListLikedYouRequ
 }
 
 // ListNewLikedYou returns all users who liked the recipient excluding those who have been liked in return.
-func (s *ExploreServer) ListNewLikedYou(_ context.Context, req *pb.ListLikedYouRequest) (*pb.ListLikedYouResponse, error) {
+func (s *ExploreServer) ListNewLikedYou(ctx context.Context, req *pb.ListLikedYouRequest) (*pb.ListLikedYouResponse, error) {
 	pageToken, err := s.pagination.Parse(req)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "page token parsing failed: %v", err)
 	}
-	result, err := s.repo.ListLikedYou(
-		req.GetRecipientUserId(), []int{model.MatchStatusPending, model.MatchStatusUnMatched}, repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize),
-	)
+	result, err := s.repo.ListLikedYou(ctx, []int{model.MatchStatusPending, model.MatchStatusUnMatched}, repo.NewPaginatedRequest(pageToken.Offset, pageToken.PageSize), req.GetRecipientUserId())
 	if err != nil {
 		//log.Fatal(err)
 		return nil, status.Errorf(codes.Internal, "failed to get result: %v", err)
@@ -75,8 +71,8 @@ func (s *ExploreServer) ListNewLikedYou(_ context.Context, req *pb.ListLikedYouR
 }
 
 // CountLikedYou counts the number of users who liked the recipient.
-func (s *ExploreServer) CountLikedYou(_ context.Context, req *pb.CountLikedYouRequest) (*pb.CountLikedYouResponse, error) {
-	result, err := s.repo.CountLikedYou(req.GetRecipientUserId())
+func (s *ExploreServer) CountLikedYou(ctx context.Context, req *pb.CountLikedYouRequest) (*pb.CountLikedYouResponse, error) {
+	result, err := s.repo.CountLikedYou(ctx, req.GetRecipientUserId())
 	if err != nil {
 		//log.Fatal(err)
 		return nil, status.Errorf(codes.Internal, "failed to get result: %v", err)
@@ -86,8 +82,8 @@ func (s *ExploreServer) CountLikedYou(_ context.Context, req *pb.CountLikedYouRe
 }
 
 // PutDecision record the decision of the actor to like or pass the recipient.
-func (s *ExploreServer) PutDecision(_ context.Context, req *pb.PutDecisionRequest) (*pb.PutDecisionResponse, error) {
-	err := s.repo.Decide(req.GetRecipientUserId(), req.GetActorUserId(), req.GetLikedRecipient())
+func (s *ExploreServer) PutDecision(ctx context.Context, req *pb.PutDecisionRequest) (*pb.PutDecisionResponse, error) {
+	err := s.repo.Decide(ctx, req.GetRecipientUserId(), req.GetActorUserId(), req.GetLikedRecipient())
 	if err != nil {
 		//log.Fatal(err)
 		return nil, status.Errorf(codes.Internal, "failed to update: %v", err)

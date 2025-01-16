@@ -1,8 +1,10 @@
 package repo
 
+import "context"
+
 type LikerRepo interface {
-	ListAllLikedYou(recipientUserId string, paginatedReq *PaginatedRequest) (Paginator, error)
-	ListLikedYou(recipientUserId string, statuses []int, paginatedReq *PaginatedRequest) (Paginator, error)
-	CountLikedYou(recipientUserId string) (int64, error)
-	Decide(recipientUserId string, actorUserId string, match bool) error
+	ListAllLikedYou(ctx context.Context, paginatedReq *PaginatedRequest, recipientUserId string) (Paginator, error)
+	ListLikedYou(ctx context.Context, statuses []int, paginatedReq *PaginatedRequest, recipientUserId string) (Paginator, error)
+	CountLikedYou(ctx context.Context, recipientUserId string) (int64, error)
+	Decide(ctx context.Context, recipientUserId string, actorUserId string, match bool) error
 }

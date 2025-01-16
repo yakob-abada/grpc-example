@@ -26,7 +26,7 @@ func TestListLikedYou(t *testing.T) {
 		}}
 		pr := repo.NewPaginatedResult(likeList, false)
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListAllLikedYou", "1", repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
+		repoMock.On("ListAllLikedYou", context.Background(), "1", repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
 
 		listLikedYouRes := &pb.ListLikedYouResponse{Likers: []*pb.ListLikedYouResponse_Liker{
 			{
@@ -62,7 +62,7 @@ func TestListLikedYou(t *testing.T) {
 		}}
 		pr := repo.NewPaginatedResult(likeList, true)
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListAllLikedYou", "1", repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
+		repoMock.On("ListAllLikedYou", context.Background(), "1", repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
 
 		listLikedYouRes := &pb.ListLikedYouResponse{Likers: []*pb.ListLikedYouResponse_Liker{
 			{
@@ -90,7 +90,7 @@ func TestListLikedYou(t *testing.T) {
 
 	t.Run("failure", func(t *testing.T) {
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListAllLikedYou", "1", repo.NewPaginatedRequest(10, 10)).Once().Return(nil, errors.New("connection failed"))
+		repoMock.On("ListAllLikedYou", context.Background(), "1", repo.NewPaginatedRequest(10, 10)).Once().Return(nil, errors.New("connection failed"))
 
 		mapperMock := &mapper.LikedResponseMock{}
 
@@ -121,7 +121,7 @@ func TestListNewLikedYou(t *testing.T) {
 		}}
 		pr := repo.NewPaginatedResult(likeList, false)
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListLikedYou", "1", []int{model.MatchStatusPending, model.MatchStatusUnMatched}, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
+		repoMock.On("ListLikedYou", context.Background(), "1", []int{model.MatchStatusPending, model.MatchStatusUnMatched}, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
 
 		listLikedYouRes := &pb.ListLikedYouResponse{Likers: []*pb.ListLikedYouResponse_Liker{
 			{
@@ -157,7 +157,7 @@ func TestListNewLikedYou(t *testing.T) {
 		}}
 		pr := repo.NewPaginatedResult(likeList, true)
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListLikedYou", "1", []int{model.MatchStatusPending, model.MatchStatusUnMatched}, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
+		repoMock.On("ListLikedYou", context.Background(), "1", []int{model.MatchStatusPending, model.MatchStatusUnMatched}, repo.NewPaginatedRequest(10, 10)).Once().Return(pr, nil)
 
 		listLikedYouRes := &pb.ListLikedYouResponse{Likers: []*pb.ListLikedYouResponse_Liker{
 			{
@@ -185,7 +185,7 @@ func TestListNewLikedYou(t *testing.T) {
 
 	t.Run("failure", func(t *testing.T) {
 		repoMock := &repo.LikeMock{}
-		repoMock.On("ListLikedYou", "1", []int{model.MatchStatusPending, model.MatchStatusUnMatched}, repo.NewPaginatedRequest(10, 10)).Once().Return(nil, errors.New("connection failed"))
+		repoMock.On("ListLikedYou", context.Background(), "1", []int{model.MatchStatusPending, model.MatchStatusUnMatched}, repo.NewPaginatedRequest(10, 10)).Once().Return(nil, errors.New("connection failed"))
 
 		mapperMock := &mapper.LikedResponseMock{}
 
@@ -230,7 +230,7 @@ func TestCountLikedYou(t *testing.T) {
 	})
 	t.Run("failure", func(t *testing.T) {
 		repoMock := &repo.LikeMock{}
-		repoMock.On("CountLikedYou", "1").Once().Return(nil, errors.New("connection failed"))
+		repoMock.On("CountLikedYou", context.Background(), "1").Once().Return(nil, errors.New("connection failed"))
 
 		mapperMock := &mapper.LikedResponseMock{}
 
@@ -252,7 +252,7 @@ func TestCountLikedYou(t *testing.T) {
 func TestPutDecision(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		repoMock := &repo.LikeMock{}
-		repoMock.On("Decide", "1", "2", false).Once().Return(nil)
+		repoMock.On("Decide", context.Background(), "1", "2", false).Once().Return(nil)
 
 		resp := &pb.PutDecisionResponse{MutualLikes: false}
 		mapperMock := &mapper.LikedResponseMock{}
@@ -273,7 +273,7 @@ func TestPutDecision(t *testing.T) {
 	})
 	t.Run("failure", func(t *testing.T) {
 		repoMock := &repo.LikeMock{}
-		repoMock.On("Decide", "1", "2", false).Once().Return(errors.New("connection failed"))
+		repoMock.On("Decide", context.Background(), "1", "2", false).Once().Return(errors.New("connection failed"))
 
 		mapperMock := &mapper.LikedResponseMock{}
 

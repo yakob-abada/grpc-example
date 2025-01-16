@@ -1,7 +1,7 @@
 go_container := grpc-server
 docker := docker-compose
-compose := $(docker) --file docker-compose.yml
-docker_exec := $(compose) exec
+compose := $(docker) --file docker-compose.yaml
+docker_exec := docker exec
 args = $(filter-out $@,$(MAKECMDGOALS))
 
 build:
@@ -9,6 +9,9 @@ build:
 
 up:
 	$(docker) up -d
+
+container_access:
+	$(docker_exec) -it $(go_container) bash
 
 build_proto:
 	$(docker_exec) $(go_container) protoc --go_out=./explore --go_opt=paths=source_relative \

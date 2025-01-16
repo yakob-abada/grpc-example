@@ -1,10 +1,22 @@
 # GRPC in Go
-This is a comprehensive example of building a gRPC service in Go, implementing the 
-[AIP-158](https://google.aip.dev/158) Google standard for pagination. 
-The project follows the Domain-Driven Design (DDD) pattern, emphasizing separation of concerns and maintainability. 
-Additionally, the application has been containerized using Docker to ensure consistency and ease of deployment.
+This repository provides a gRPC example project that demonstrates the implementation of [AIP-158](https://google.aip.dev/158) pagination 
+standards and adherence to Domain-Driven Design (DDD) principles. 
+The project is containerized using Docker, making it easy to set up and run in a consistent environment.
 
-## Installation
+
+## Getting Started
+
+### Prerequisites
+
+- [Docker](https://www.docker.com/get-started)
+- [Go](https://golang.org/doc/install) (if running locally without Docker)
+
+### Clone the Repository
+
+```
+git clone https://github.com/yakob-abada/grpc-example.git
+cd grpc-example
+```
 
 * copy `env.example` file to `.env` `cp env.example .env`
 * Build and start the application with Docker Compose `make build`
